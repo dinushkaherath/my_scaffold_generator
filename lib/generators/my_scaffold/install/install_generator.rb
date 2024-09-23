@@ -9,17 +9,16 @@ module MyScaffold
       helper_file = "app/helpers/application_helper.rb"
 
       if File.exist?(helper_file)
-        inject_into_file helper_file, before: /^end\s*$/ do
-          <<~RUBY
-              def render_flash_stream
-                turbo_stream.update 'flash', partial: 'layouts/flash'
-              end
-          RUBY
-        end
+        insert_into_file helper_file, <<~RUBY.indent(2), before: /^end\s*$/
+          def render_flash_stream
+            turbo_stream.update 'flash', partial: 'layouts/flash'
+          end
+        RUBY
       else
         say_status("error", "app/helpers/application_helper.rb not found", :red)
       end
     end
+
 
     # Copy image assets
     def copy_image_assets
@@ -42,21 +41,21 @@ module MyScaffold
 
     # Method to handle injecting the generator configurations
     def inject_generators_configuration(file_path)
-      config_block = <<~RUBY
-            config.generators do |g|
-              g.assets            false
-              g.helper            false
-              g.test_framework    nil
-              g.jbuilder          false
-              g.scaffold_controller :my_scaffold
-            end
+      config_block = <<~RUBY.indent(4)
+        config.generators do |g|
+          g.assets            false
+          g.helper            false
+          g.test_framework    nil
+          g.jbuilder          false
+          g.scaffold_controller :my_scaffold
+        end
       RUBY
 
       # Check if config.generators block already exists
       if File.read(file_path).include?('config.generators do |g|')
         # Inject the missing lines if not already present
         inject_into_file file_path, after: /config.generators do \|g\|\n/ do
-          <<~RUBY
+          <<~RUBY.indent(6)
             g.assets            false unless g.assets == false
             g.helper            false unless g.helper == false
             g.test_framework    nil unless g.test_framework.nil?
