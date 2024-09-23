@@ -1,0 +1,8 @@
+.bg-white.shadow-md.rounded-lg.overflow-hidden
+  .grid.grid-cols-<%= attributes.length + 1 %>.bg-gray-100.text-left.font-bold.text-sm.px-4.py-2.border-b<% attributes.each do |attribute| %>
+    %div <%= attribute.name.titleize %><% end %>
+    %div Actions
+  = turbo_frame_tag 'new_<%= singular_table_name %>' do
+    = render "<%= plural_table_name %>/form", <%= singular_table_name %>: @new_<%= singular_table_name %>
+  #<%= plural_table_name %>
+    = render @<%= plural_table_name %>

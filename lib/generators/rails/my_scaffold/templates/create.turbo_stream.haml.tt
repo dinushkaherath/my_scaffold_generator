@@ -1,0 +1,4 @@
+= turbo_stream.prepend "<%= plural_table_name %>", @<%= singular_table_name %>
+= turbo_stream.update "new_<%= singular_route_name %>" do
+  = render "form", <%= singular_table_name %>: @new_<%= singular_table_name %>
+= render_flash_stream

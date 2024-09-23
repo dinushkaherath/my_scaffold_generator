@@ -1,0 +1,2 @@
+= turbo_stream.remove @<%= singular_table_name %>
+= render_flash_stream

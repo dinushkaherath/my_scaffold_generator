@@ -1,0 +1,2 @@
+= turbo_frame_tag "new_<%= singular_table_name %>" do
+  = render "form", <%= singular_table_name %>: @<%= singular_table_name %>

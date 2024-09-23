@@ -1,0 +1,24 @@
+= turbo_frame_tag <%= singular_table_name %> do
+  .grid.grid-cols-<%= attributes.length + 1 %>.items-center.border-b.border-gray-300.hover:bg-gray-50.px-4.py-2.text-sm<% attributes.each do |attribute| %>
+<% case attribute.field_type
+   when :text_field, :email_field, :url_field, :number_field -%>
+    %div= <%= singular_table_name %>.<%= attribute.name %>
+<% when :text_area -%>
+    %div= truncate(<%= singular_table_name %>.<%= attribute.name %>, length: 100) # Adjust length as needed
+<% when :date_field -%>
+    %div= <%= singular_table_name %>.<%= attribute.name %>&.strftime("%Y-%m-%d")
+<% when :datetime_field -%>
+    %div= <%= singular_table_name %>.<%= attribute.name %>&.strftime("%Y-%m-%d %H:%M")
+<% when :color_field -%>
+    %div= <%= singular_table_name %>.<%= attribute.name %> # Assuming color value is shown as hex
+<% when :check_box -%>
+    %div= <%= singular_table_name %>.<%= attribute.name %> ? "Yes" : "No"
+<% when :select -%>
+    %div= <%= singular_table_name %>.<%= attribute.name %> # Assuming this is an enum or reference value<% end -%><% end %>
+    .flex.space-x-2
+      -# Link to the edit page with the pencil icon
+      = link_to image_tag("pencil.svg", class: "h-5 w-5 text-blue-500 hover:text-blue-600"), edit_<%= singular_table_name %>_path(<%= singular_table_name %>)
+
+      -# Button to delete the item with the trash icon
+      = button_to <%= singular_table_name %>_path(<%= singular_table_name %>), method: :delete, form: { data: { turbo_confirm: "Are you sure?" }}, class: "inline-block" do
+        = image_tag("trash.svg", class: "h-5 w-5 text-red-500 hover:text-red-600")
