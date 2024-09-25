@@ -1,0 +1,10 @@
+class <%= class_name %> < ApplicationRecord
+  <% attributes.each do |attribute| -%>
+  validates :<%= attribute.name %>, presence: true
+  <% end -%>
+
+  # Broadcast changes for Hotwire Turbo
+  after_create_commit  { broadcast_prepend_to "<%= plural_table_name %>", partial: "<%= plural_table_name %>/<%= singular_name %>", locals: { <%= singular_name %>: self }, target: "<%= plural_table_name %>" }
+  after_update_commit  { broadcast_replace_to "<%= plural_table_name %>", partial: "<%= plural_table_name %>/<%= singular_name %>", locals: { <%= singular_name %>: self } }
+  after_destroy_commit { broadcast_remove_to "<%= plural_table_name %>" }
+end

@@ -8,6 +8,10 @@ class Rails::MyScaffoldGenerator < Rails::Generators::NamedBase
 
   argument :attributes, type: :array, default: [], banner: "field:type field:type"
 
+  # Override the default Rails method to generate the model
+  def create_custom_model
+    template "model.rb.tt", File.join("app/models", class_path, "#{file_name}.rb"), force: true
+  end
 
   def create_custom_controller
     template "controller.rb.tt", File.join("app/controllers", class_path, "#{controller_file_name}_controller.rb"), force: true
@@ -31,6 +35,7 @@ class Rails::MyScaffoldGenerator < Rails::Generators::NamedBase
   end
 
   private
+
     def available_views
       %w(index edit show new _form)
     end
