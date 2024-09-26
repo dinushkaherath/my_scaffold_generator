@@ -24,33 +24,34 @@ class <%= controller_class_name %>Controller < ApplicationController
   def create
     @<%= singular_table_name %> = <%= class_name %>.new(<%= singular_table_name %>_params)
 
-    respond_to do |format|
-      if @<%= singular_table_name %>.save
-        format.turbo_stream do
-          @<%= plural_table_name %> = <%= class_name %>.order(created_at: :desc)
-          @new_<%= singular_table_name %> = <%= class_name %>.new
+    if @<%= singular_table_name %>.save
+      flash.now[:notice] = '<%= human_name %> successfully created.'
 
-          flash.now[:notice] = '<%= human_name %> successfully created.'
-        end
+      respond_to do |format|
+        format.turbo_stream { @new_<%= singular_table_name %> = <%= class_name %>.new }
         format.html { redirect_to <%= plural_table_name %>_url, notice: '<%= human_name %> was successfully created.' }
-      else
+      end
+    else
+      respond_to do |format|
         format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('new_<%= singular_table_name %>', partial: "<%= plural_table_name %>/form", locals: { <%= singular_table_name %>: @<%= singular_table_name %> }) }
       end
     end
   end
 
   # PATCH/PUT /<%= plural_table_name %>/1
   def update
-    respond_to do |format|
-      if @<%= singular_table_name %>.update(<%= singular_table_name %>_params)
-        format.turbo_stream do
-          @<%= plural_table_name %> = <%= class_name %>.order(created_at: :desc)
+    if @<%= singular_table_name %>.update(<%= singular_table_name %>_params)
+      flash.now[:notice] = '<%= human_name %> successfully updated.'
 
-          flash.now[:notice] = '<%= human_name %> successfully updated.'
-        end
+      respond_to do |format|
+        format.turbo_stream
         format.html { redirect_to <%= plural_table_name %>_url, notice: '<%= human_name %> was successfully updated.' }
-      else
+      end
+    else
+      respond_to do |format|
         format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@<%= singular_table_name %>, partial: "<%= plural_table_name %>/form", locals: { <%= singular_table_name %>: @<%= singular_table_name %> }) }
       end
     end
   end
@@ -58,9 +59,12 @@ class <%= controller_class_name %>Controller < ApplicationController
   # DELETE /<%= plural_table_name %>/1
   def destroy
     @<%= singular_table_name %>.destroy
+
+    flash.now[:alert] = 'Task was successfully destroyed.'
+
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to <%= plural_table_name %>_url, notice: '<%= human_name %> was successfully destroyed.' }
+      format.html { redirect_to <%= plural_table_name %>_url, alert: '<%= human_name %> was successfully destroyed.' }
     end
   end
 

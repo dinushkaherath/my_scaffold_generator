@@ -1,36 +1,37 @@
-= form_for <%= singular_table_name %> do |f|
-  .grid.grid-cols-<%= attributes.length + 1 %>.gap-2.items-center.p-2.border.border-gray-300
-    - if <%= singular_table_name %>.errors.any?
-      #error_explanation.bg-red-50.border-l-4.border-red-400.p-2.mb-2.col-span-<%= attributes.length + 1 %>
-        %h2.text-red-700.font-bold= "#{pluralize(<%= singular_table_name %>.errors.count, 'error')} prohibited this <%= singular_table_name %> from being saved:"
-        %ul.text-red-600
-          - <%= singular_table_name %>.errors.full_messages.each do |message|
-            %li= message
-<% attributes.each do |attribute| %>
-    .col-span-1
-<% case attribute.field_type
-   when :text_field -%>
-      = f.text_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :email_field -%>
-      = f.email_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :url_field -%>
-      = f.url_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :number_field -%>
-      = f.number_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :text_area -%>
-      = f.text_area :<%= attribute.name %>, rows: 1, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :date_field -%>
-      = f.date_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :datetime_field -%>
-      = f.datetime_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :color_field -%>
-      = f.color_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% when :check_box -%>
-      = f.check_box :<%= attribute.name %>, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-<% when :select -%>
-      = f.select :<%= attribute.name %>, options_for_select(@<%= plural_table_name %>_options), { include_blank: true }, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-<% end -%>
-<% end %>
-    .col-span-1.flex.space-x-2
-      = f.submit 'Save', class: "py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      = link_to 'Cancel', <%= singular_table_name %>, class: "py-1 px-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+= turbo_frame_tag dom_id(<%= singular_table_name %>) do
+  = form_for <%= singular_table_name %> do |f|
+    .grid.grid-cols-<%= attributes.length + 1 %>.gap-2.items-center.p-2.border.border-gray-300
+      - if <%= singular_table_name %>.errors.any?
+        #error_explanation.bg-red-50.border-l-4.border-red-400.p-2.mb-2.col-span-<%= attributes.length + 1 %>
+          %h2.text-red-700.font-bold= "#{pluralize(<%= singular_table_name %>.errors.count, 'error')} prohibited this <%= singular_table_name %> from being saved:"
+          %ul.text-red-600
+            - <%= singular_table_name %>.errors.full_messages.each do |message|
+              %li= message
+  <% attributes.each do |attribute| %>
+      .col-span-1
+  <% case attribute.field_type
+    when :text_field -%>
+        = f.text_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :email_field -%>
+        = f.email_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :url_field -%>
+        = f.url_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :number_field -%>
+        = f.number_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :text_area -%>
+        = f.text_area :<%= attribute.name %>, rows: 1, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :date_field -%>
+        = f.date_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :datetime_field -%>
+        = f.datetime_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :color_field -%>
+        = f.color_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% when :check_box -%>
+        = f.check_box :<%= attribute.name %>, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+  <% when :select -%>
+        = f.select :<%= attribute.name %>, options_for_select(@<%= plural_table_name %>_options), { include_blank: true }, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+  <% end -%>
+  <% end %>
+      .col-span-1.flex.space-x-2
+        = f.submit 'Save', class: "py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        = link_to 'Cancel', <%= plural_table_name %>_path, data: { turbo_frame: "_top" }, class: "py-1 ml-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
