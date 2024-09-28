@@ -11,25 +11,25 @@
       .col-span-1
   <% case attribute.field_type
     when :text_field -%>
-        = f.text_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.text_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :email_field -%>
-        = f.email_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.email_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :url_field -%>
-        = f.url_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.url_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :number_field -%>
-        = f.number_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.number_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :text_area -%>
-        = f.text_area :<%= attribute.name %>, rows: 1, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.text_area :<%= attribute.name %>, rows: 1, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :date_field -%>
-        = f.date_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.date_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :datetime_field -%>
-        = f.datetime_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.datetime_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :color_field -%>
-        = f.color_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.color_field :<%= attribute.name %>, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% when :check_box -%>
-        = f.check_box :<%= attribute.name %>, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+      = f.check_box :<%= attribute.name %>, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
   <% when :select -%>
-        = f.select :<%= attribute.name %>, options_for_select(@<%= plural_table_name %>_options), { include_blank: true }, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+      = f.select :<%= attribute.name %>, options_for_select(@<%= plural_table_name %>_options), { include_blank: true }, class: "w-full rounded-md border-gray-300 border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
   <% end -%>
   <% end %>
       .col-span-1.flex.space-x-2
