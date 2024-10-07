@@ -24,6 +24,7 @@ module MyScaffold
     def copy_image_assets
       copy_file "pencil.svg", "app/assets/images/pencil.svg"
       copy_file "trash.svg", "app/assets/images/trash.svg"
+      copy_file "archive.svg", "app/assets/images/archive.svg"
     end
 
     # Add or update config.generators in config/application.rb

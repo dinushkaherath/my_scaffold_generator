@@ -1,10 +1,14 @@
 class <%= controller_class_name %>Controller < ApplicationController
-  before_action :set_<%= singular_table_name %>, only: %i[ show edit update destroy ]
+  before_action :set_<%= singular_table_name %>, only: %i[ show edit update destroy archive]
 
   # GET /<%= plural_table_name %>
   def index
     @<%= plural_table_name %> = <%= class_name %>.order(created_at: :desc)
     @new_<%= singular_table_name %> = <%= class_name %>.new
+
+    # Fetch completed and incomplete <%= plural_table_name %> directly
+    @incomplete_<%= plural_table_name %>_by_category = @<%= plural_table_name %>.not_completed.group_by(&:category)
+    @completed_<%= plural_table_name %> = @<%= plural_table_name %>.completed
   end
 
   # GET /<%= plural_table_name %>/1
@@ -56,11 +60,22 @@ class <%= controller_class_name %>Controller < ApplicationController
     end
   end
 
+  # PATCH/PUT /<%= plural_table_name %>/1
+  def archive
+    @<%= singular_table_name %>.update_column(:completed, !@<%= singular_table_name %>.completed)
+    flash.now[:notice] = "<%= human_name %> successfully #{@<%= singular_table_name %>.completed ? "" : "un"}archived." 
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to <%= plural_table_name %>_url, notice: "<%= human_name %> was successfully #{@<%= singular_table_name %>.completed ? "" : "un"}archived." }
+    end
+  end
+
   # DELETE /<%= plural_table_name %>/1
   def destroy
     @<%= singular_table_name %>.destroy
 
-    flash.now[:alert] = 'Task was successfully destroyed.'
+    flash.now[:alert] = '<%= human_name %> was successfully destroyed.'
 
     respond_to do |format|
       format.turbo_stream

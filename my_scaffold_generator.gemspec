@@ -1,7 +1,7 @@
 # my_scaffold_generator.gemspec
 Gem::Specification.new do |spec|
   spec.name          = "my_scaffold_generator"
-  spec.version       = "0.1.2"  # Set the version directly here
+  spec.version       = "0.1.3"  # Set the version directly here
   spec.authors       = ["dinushkaherath"]
   spec.email         = ["dinushka.herath@gmail.com"]
 

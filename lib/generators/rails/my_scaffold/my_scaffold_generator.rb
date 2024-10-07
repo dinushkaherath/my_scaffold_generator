@@ -37,6 +37,19 @@ class Rails::MyScaffoldGenerator < Rails::Generators::NamedBase
     end
   end
 
+  # Modify the existing Category model
+  def inject_has_many_to_category
+    model_file_path = File.join("app/models/category.rb")
+
+    if model_file_path
+      inject_into_file model_file_path, after: "class Category < ApplicationRecord\n" do
+        <<~RUBY.indent(2)
+          has_many :#{plural_table_name}
+        RUBY
+      end
+    end
+  end
+
   # Override the default Rails method to generate the model
   def create_custom_model
     # Define the path to the model file
@@ -64,11 +77,12 @@ class Rails::MyScaffoldGenerator < Rails::Generators::NamedBase
       end.join("\n")
 
       <<~RUBY.indent(2)
+        scope :completed, -> { where(completed: true) }
+        scope :not_completed, -> { where(completed: false) }
+        belongs_to :category
         #{validations}
 
         # Broadcast changes for Hotwire Turbo
-        after_create_commit  { broadcast_prepend_to "#{plural_table_name}", partial: "#{plural_table_name}/#{singular_table_name}", locals: { #{singular_table_name}: self }, target: "#{plural_table_name}" }
-        after_update_commit  { broadcast_replace_to "#{plural_table_name}", partial: "#{plural_table_name}/#{singular_table_name}", locals: { #{singular_table_name}: self } }
         after_destroy_commit { broadcast_remove_to "#{plural_table_name}" }
 
         after_initialize :set_defaults, unless: :persisted?
@@ -76,6 +90,7 @@ class Rails::MyScaffoldGenerator < Rails::Generators::NamedBase
         private
 
         def set_defaults
+          self.category ||= Category.default
         #{set_defaults}
         end
       RUBY
@@ -93,13 +108,42 @@ class Rails::MyScaffoldGenerator < Rails::Generators::NamedBase
     end
 
     template "_partial.html.haml", File.join("app/views", controller_file_path, "_#{singular_table_name}.html.haml"), force: true
+    template "_completed_partial.html.haml", File.join("app/views", controller_file_path, "_completed_#{plural_table_name}.html.haml"), force: true
+    template "_partial_with_category.html.haml", File.join("app/views", controller_file_path, "_#{plural_table_name}_with_category.html.haml"), force: true
   end
 
   # Generate Turbo Stream templates for real-time updates
   def create_turbo_streams
-    turbo_streams = %w[create update destroy]
+    turbo_streams = %w[create update destroy archive]
     turbo_streams.each do |action|
       template "#{action}.turbo_stream.haml", File.join("app/views", controller_file_path, "#{action}.turbo_stream.haml"), force: true
+    end
+  end
+
+  def inject_archive_route
+    routes_file = "config/routes.rb"
+
+    # Check if routes file already contains `resources :tasks`
+    if File.read(routes_file).include?("resources :#{plural_table_name}")
+      # If it's already using the block format
+      if File.read(routes_file).include?("resources :#{plural_table_name} do")
+        inject_into_file routes_file, after: "resources :#{plural_table_name} do\n" do
+          <<~RUBY.indent(4)
+            member do
+              patch :archive
+            end
+          RUBY
+        end
+      else
+        # Replace single-line `resources :tasks` with block version including `archive`
+        gsub_file routes_file, "resources :#{plural_table_name}", <<~RUBY
+  resources :#{plural_table_name} do
+    member do
+      patch :archive
+    end
+  end
+        RUBY
+      end
     end
   end
 

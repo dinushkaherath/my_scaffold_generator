@@ -1,0 +1,6 @@
+= turbo_frame_tag :completed do
+  %h2.text-xl.font-bold.mt-4.mb-2
+    Completed
+
+  = turbo_frame_tag :completed_<%= plural_table_name %> do
+    = render <%= plural_table_name %>

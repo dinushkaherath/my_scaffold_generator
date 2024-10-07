@@ -22,3 +22,6 @@
       -# Button to delete the item with the trash icon
       = button_to <%= singular_table_name %>_path(<%= singular_table_name %>), method: :delete, form: { data: { turbo_confirm: "Are you sure?" }}, class: "inline-block" do
         = image_tag("trash.svg", class: "h-5 w-5 text-red-500 hover:text-red-600")
+
+      -# Archive
+      = link_to image_tag("archive.svg", class: "h-6 w-6 text-blue-500 hover:text-blue-600"), archive_<%= singular_table_name %>_path(<%= singular_table_name %>), data: { turbo_method: "patch" }

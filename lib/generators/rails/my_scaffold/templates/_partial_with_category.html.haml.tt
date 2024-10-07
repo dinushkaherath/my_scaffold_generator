@@ -1,0 +1,5 @@
+= turbo_frame_tag dom_id(category) do
+  %h2.text-xl.font-bold.mt-4.mb-2= category.name
+
+  = turbo_frame_tag dom_id(category, "<%= plural_table_name %>") do
+    = render <%= plural_table_name %>

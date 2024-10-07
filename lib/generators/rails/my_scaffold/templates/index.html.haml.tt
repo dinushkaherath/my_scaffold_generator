@@ -6,4 +6,10 @@
   = turbo_frame_tag 'new_<%= singular_table_name %>' do
     = render "<%= plural_table_name %>/form", <%= singular_table_name %>: @new_<%= singular_table_name %>
   #<%= plural_table_name %>
-    = render @<%= plural_table_name %>
+    -# Render incomplete <%= plural_table_name %> grouped by category
+    - @incomplete_<%= plural_table_name %>_by_category.each do |category, <%= plural_table_name %>|
+      = render "<%= plural_table_name %>/<%= plural_table_name %>_with_category", category: category, <%= plural_table_name %>: <%= plural_table_name %>
+
+    -# Render the "Completed" category
+    - if @completed_<%= plural_table_name %>.any?
+      = render "<%= plural_table_name %>/completed_<%= plural_table_name %>", <%= plural_table_name %>: @completed_<%= plural_table_name %>

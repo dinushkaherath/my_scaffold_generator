@@ -1,0 +1,18 @@
+= turbo_stream.remove @<%= singular_table_name %>
+
+- if @<%= singular_table_name %>.completed?
+  - if @<%= singular_table_name %>.category.<%= plural_table_name %>.not_completed.count == 0
+    = turbo_stream.remove dom_id(@<%= singular_table_name %>.category)
+  - if <%= class_name %>.completed.count > 1
+    = turbo_stream.prepend "completed_<%= plural_table_name %>", partial: "<%= plural_table_name %>/<%= singular_table_name %>", locals: { <%= singular_table_name %>: @<%= singular_table_name %> }
+  - else
+    = turbo_stream.append("<%= plural_table_name %>", partial: "<%= plural_table_name %>/completed_<%= plural_table_name %>", locals: { <%= plural_table_name %>: [@<%= singular_table_name %>] })
+- else
+  - if <%= class_name %>.completed.count == 0
+    = turbo_stream.remove "completed"
+  - if @<%= singular_table_name %>.category.<%= plural_table_name %>.not_completed.count == 1
+    = turbo_stream.prepend("<%= plural_table_name %>", partial: "<%= plural_table_name %>/category_with_<%= singular_table_name %>", locals: { category: @<%= singular_table_name %>.category, <%= plural_table_name %>: [@<%= singular_table_name %>] })
+  - else
+    = turbo_stream.prepend dom_id(@<%= singular_table_name %>.category, "<%= plural_table_name %>"), @<%= singular_table_name %>
+
+= render_flash_stream

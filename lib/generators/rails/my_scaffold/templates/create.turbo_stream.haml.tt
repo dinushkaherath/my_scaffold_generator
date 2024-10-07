@@ -1,4 +1,7 @@
-= turbo_stream.prepend "<%= plural_table_name %>", @<%= singular_table_name %>
-= turbo_stream.update "new_<%= singular_route_name %>" do
+- if @<%= singular_table_name %>.category.<%= plural_table_name %>.count == 1
+  = turbo_stream.append("<%= plural_table_name %>", partial: "<%= plural_table_name %>/<%= plural_table_name %>_with_category", locals: { category: @<%= singular_table_name %>.category, <%= plural_table_name %>: [@<%= singular_table_name %>] })
+- else
+  = turbo_stream.prepend dom_id(@<%= singular_table_name %>.category, "<%= plural_table_name %>"), @<%= singular_table_name %>
+= turbo_stream.update "new_<%= singular_table_name %>" do
   = render "form", <%= singular_table_name %>: @new_<%= singular_table_name %>
 = render_flash_stream
